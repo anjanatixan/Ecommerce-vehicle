@@ -2,12 +2,10 @@ import 'package:ecommerce/apiServices/urls.dart';
 import 'package:ecommerce/models/subCategoryModel.dart';
 import 'package:ecommerce/views/helper/navigation.dart';
 import 'package:ecommerce/views/provider/categoryProvider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:neumorphic_ui/neumorphic_ui.dart';
 import 'package:provider/provider.dart';
-
 import 'cartpage.dart';
 import 'helper/utils.dart';
 import 'productDetails.dart';
@@ -173,16 +171,23 @@ class _ProductPageState extends State<ProductPage> {
                     Column(
                       children: [
                         GestureDetector(
-                          onTap: () async{
+                          onTap: () async {
                             setState(() {
                               selectedIndex = -1;
-                              getContext().read<CategoryProvider>().paginationIndex=1;
-                              getContext().read<CategoryProvider>().productModel!.product=[];
-                              searched=false;
-                              filtered=false;
+                              getContext()
+                                  .read<CategoryProvider>()
+                                  .paginationIndex = 1;
+                              getContext()
+                                  .read<CategoryProvider>()
+                                  .productModel!
+                                  .product = [];
+                              searched = false;
+                              filtered = false;
                             });
 
-                            await getContext().read<CategoryProvider>().fetchProductlist();
+                            await getContext()
+                                .read<CategoryProvider>()
+                                .fetchProductlist();
                           },
                           child: Container(
                             width: 60.w,
@@ -237,8 +242,12 @@ class _ProductPageState extends State<ProductPage> {
                                 child: InkWell(
                                   onTap: () async {
                                     _selectedOption = null;
+                                    getContext()
+                                        .read<CategoryProvider>()
+                                        .subCategoryId = null;
                                     setState(() {
                                       selectedIndex = index;
+                                      searched = false;
                                     });
                                     await getContext()
                                         .read<CategoryProvider>()
@@ -352,10 +361,8 @@ class _ProductPageState extends State<ProductPage> {
                                         getContext()
                                             .read<CategoryProvider>()
                                             .paginationIndex = 1;
-                                            filtered = true;
-                                            setState(() {
-                                              
-                                            });
+                                        filtered = true;
+                                        setState(() {});
                                         await getContext()
                                             .read<CategoryProvider>()
                                             .fetchCategoryProductlist();
@@ -458,187 +465,166 @@ class _ProductPageState extends State<ProductPage> {
                 )),
           );
         }),
-         searched == true
-                ? search()
-                : filtered == true
-                    ? filteredData()
-                    : allProducts()
+        searched == true
+            ? search()
+            : filtered == true
+                ? filteredData()
+                : allProducts()
       ]),
     );
   }
 
   Consumer<CategoryProvider> filteredData() {
-    return Consumer<CategoryProvider>(
-                      builder: (context, provider, child) {
-                      return provider.categoryProductModel != null
-                          ? provider.categoryProductModel!.productlist.isNotEmpty
-                              ? Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: GridView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount:
-                                            2, // Number of columns in the grid
-                                        crossAxisSpacing:
-                                            8.0, // Spacing between columns
-                                        mainAxisSpacing:
-                                            8.0, // Spacing between rows
-                                      ),
-                                      itemCount: provider.categoryProductModel!.productlist
-                                          .length, // Number of items in the grid
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return InkWell(
-                                            onTap: () async {
-                                              await getContext()
-                                                  .read<CategoryProvider>()
-                                                  .setProductId(provider
-                                                      .categoryProductModel!.productlist[index].id);
-                                              NavigationUtils.goNext(
-                                                  context, ProductDetails());
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Container(
-                                                width: 110.w,
-                                                color: Colors.white,
-                                                child: Stack(
+    return Consumer<CategoryProvider>(builder: (context, provider, child) {
+      return provider.categoryProductModel != null
+          ? provider.categoryProductModel!.productlist.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns in the grid
+                        crossAxisSpacing: 8.0, // Spacing between columns
+                        mainAxisSpacing: 8.0, // Spacing between rows
+                      ),
+                      itemCount: provider.categoryProductModel!.productlist
+                          .length, // Number of items in the grid
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                            onTap: () async {
+                              await getContext()
+                                  .read<CategoryProvider>()
+                                  .setProductId(provider.categoryProductModel!
+                                      .productlist[index].id);
+                              NavigationUtils.goNext(context, ProductDetails());
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: 110.w,
+                                color: Colors.white,
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topRight,
+                                            child: Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.grey.shade300,
+                                              size: 18.sp,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Image.network(
+                                              Urls.IMAGE_URL +
+                                                  provider
+                                                      .categoryProductModel!
+                                                      .productlist[index]
+                                                      .images,
+                                              width: 80.w,
+                                              height: 80.h,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            provider.categoryProductModel!
+                                                .productlist[index].productName,
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                  fontSize: 10.sp,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Row(
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets
-                                                              .all(10.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Align(
-                                                            alignment:
-                                                                Alignment
-                                                                    .topRight,
-                                                            child: Icon(
-                                                              Icons
-                                                                  .favorite_border,
-                                                              color: Colors
-                                                                  .grey
-                                                                  .shade300,
-                                                              size: 18.sp,
-                                                            ),
-                                                          ),
-                                                          Center(
-                                                            child:
-                                                                Image.network(
-                                                              Urls.IMAGE_URL +
-                                                                  provider.
-                                                                     categoryProductModel!.productlist[
-                                                                          index].images
-                                                                      ,
-                                                              width: 80.w,
-                                                              height: 80.h,
-                                                              fit: BoxFit
-                                                                  .cover,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Text(
-                                                            provider
-                                                                .categoryProductModel!.productlist[
-                                                                    index]
-                                                                .productName,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              textStyle: TextStyle(
-                                                                  fontSize:
-                                                                      10.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 2,
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      "Rs. ${provider.categoryProductModel!.productlist[index].price.toString()} ",
-                                                                      style: GoogleFonts
-                                                                          .lato(
-                                                                        textStyle: TextStyle(
-                                                                            fontSize: 10.sp,
-                                                                            decoration: TextDecoration.lineThrough,
-                                                                            color: Colors.black,
-                                                                            fontWeight: FontWeight.w500),
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                        "Rs. ${provider.categoryProductModel!.productlist[index].offerPrice} ",
-                                                                        style:
-                                                                            GoogleFonts.lato(textStyle: TextStyle(fontSize: 10.sp, color: Colors.black, fontWeight: FontWeight.w500))),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      "4.5 ",
-                                                                      style: GoogleFonts
-                                                                          .lato(
-                                                                        textStyle: TextStyle(
-                                                                            fontSize: 10.sp,
-                                                                            color: Colors.black,
-                                                                            fontWeight: FontWeight.w500),
-                                                                      ),
-                                                                    ),
-                                                                    Icon(
-                                                                      Icons
-                                                                          .star,
-                                                                      size: 16
-                                                                          .sp,
-                                                                      color: Colors
-                                                                          .greenAccent,
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                    Text(
+                                                      "Rs. ${provider.categoryProductModel!.productlist[index].price.toString()} ",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 10.sp,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
                                                       ),
                                                     ),
+                                                    Text(
+                                                        "Rs. ${provider.categoryProductModel!.productlist[index].offerPrice} ",
+                                                        style: GoogleFonts.lato(
+                                                            textStyle: TextStyle(
+                                                                fontSize: 10.sp,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500))),
                                                   ],
                                                 ),
                                               ),
-                                            ));
-                                      }),
-                                )
-                              : Container(
-                                  height: 200,
-                                  child: Center(
-                                    child: Text("No data found"),
-                                  ),
-                                )
-                          : Container();
-                    });
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "4.5 ",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 10.sp,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.star,
+                                                      size: 16.sp,
+                                                      color: Colors.greenAccent,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                      }),
+                )
+              : Container(
+                  height: 200,
+                  child: Center(
+                    child: Text("No data found"),
+                  ),
+                )
+          : Container();
+    });
   }
 
   Consumer<CategoryProvider> search() {
@@ -794,7 +780,8 @@ class _ProductPageState extends State<ProductPage> {
 
   Consumer<CategoryProvider> allProducts() {
     return Consumer<CategoryProvider>(builder: (context, provider, child) {
-      return Padding(
+      return provider.productModel!.product.length!=0?
+      Padding(
         padding: const EdgeInsets.all(12.0),
         child: GridView.builder(
             shrinkWrap: true,
@@ -921,92 +908,118 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ));
             }),
-      );
+      ):Container(
+                  height: 200,
+                  child: Center(
+                    child: Text("No data found"),
+                  ),
+                );
     });
   }
 
   MyBottomSheet() {
     return Consumer<CategoryProvider>(builder: (context, provider, child) {
       return provider.brandModel != null
-          ? Container(
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Choose your brands",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                        )),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: provider.brandModel!.brandlist.length,
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          var datas = provider.brandModel!.brandlist[index];
-                          return CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            dense: true,
-                            activeColor: Colors.red,
-                            checkColor: Colors.white,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 12.0),
-                            title: Text(
-                              datas.brandName.toString(),
-                              style: GoogleFonts.lato(
-                                fontSize: 12.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            value: datas.selected,
-                            onChanged: (bool? value) {
-                              // setState(() {
-                              //   datas.selected= value; // Update the selected state
-                              // });
-                              provider.selectBrandIndex(datas);
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 10.h,
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add your button onPressed logic here
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: Text(
-                        'Apply filters',
-                        style: GoogleFonts.lato(
-                          fontSize: 12.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
+          ? provider.brandModel!.brandlist.length != 0
+              ? Container(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Choose your brands",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                            )),
+                        SizedBox(
+                          height: 15.h,
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: provider.brandModel!.brandlist.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              var datas = provider.brandModel!.brandlist[index];
+                              return CheckboxListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                dense: true,
+                                activeColor: Colors.red,
+                                checkColor: Colors.white,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 12.0),
+                                title: Text(
+                                  datas.brandName.toString(),
+                                  style: GoogleFonts.lato(
+                                    fontSize: 12.sp,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                value: datas.selected,
+                                onChanged: (bool? value) {
+                                  // setState(() {
+                                  //   datas.selected= value; // Update the selected state
+                                  // });
+                                  provider.selectBrandIndex(datas);
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 10.h,
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                             searched = false;
+                              filtered = false;
+                              setState(() {
+                                
+                              });
+                            getContext()
+                                .read<CategoryProvider>()
+                                .paginationIndex = 1;
+                                getContext()
+                                .read<CategoryProvider>().productModel!.product=[];
+                            await getContext()
+                                .read<CategoryProvider>()
+                                .fetchfilterProductlist();
+                            NavigationUtils.goBack(context);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red),
+                          ),
+                          child: Text(
+                            'Apply filters',
+                            style: GoogleFonts.lato(
+                              fontSize: 12.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : Container(
+                  height: 200,
+                  child: Center(
+                    child: Text("No data found"),
+                  ),
+                )
           : Container();
     });
   }

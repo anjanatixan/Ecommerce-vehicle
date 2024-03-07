@@ -147,4 +147,24 @@ class CategoryRepo {
     } else {}
     return "";
   }
+
+  Future<String> getFilterProductList(int paginationIndex) async {
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+    var body = jsonEncode({
+      "brand_id":getContext().read<CategoryProvider>().brandId,
+      "index": paginationIndex,
+    });
+    log(getContext().read<CategoryProvider>().brandId.toString());
+    final response = await _service.postResponse(Urls.FILTERDATA, body, headers);
+    log(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+      ProductModel model = ProductModel.fromJson(responseBody);
+      getContext().read<CategoryProvider>().setProductList(model);
+      log("message" + responseBody.toString());
+    } else {}
+    return "";
+  }
 }

@@ -11,4 +11,5 @@ class Urls {
   static String SUBCATEGORY = "subcategorylist";
   static String BRANDlIST = "brand_list";
   static String CATEGORYPRODUCT = "categoryproductlist";
+  static String FILTERDATA = "brandfilter";
 }

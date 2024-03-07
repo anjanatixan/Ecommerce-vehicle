@@ -151,4 +151,10 @@ class CategoryProvider with ChangeNotifier {
     this.categoryProductModel = model;
     notifyListeners();
   }
+
+  fetchfilterProductlist() async {
+    showLoading(getContext());
+    await categoryRepo.getFilterProductList(paginationIndex);
+    NavigationUtils.goBack(getContext());
+  }
 }
