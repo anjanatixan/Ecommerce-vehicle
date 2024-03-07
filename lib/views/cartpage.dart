@@ -80,7 +80,7 @@ class _CartPageState extends State<CartPage> {
                                   height: 20,
                                   width: 20,
                                   decoration: BoxDecoration(
-                                      color: Colors.red,
+                                      color: Color(0xffE80F0F),
                                       borderRadius: BorderRadius.circular(20)),
                                   child: Icon(
                                     Icons.close,
@@ -159,7 +159,7 @@ class _CartPageState extends State<CartPage> {
                                             style: GoogleFonts.lato(
                                                 textStyle: TextStyle(
                                                     fontSize: 13.sp,
-                                                    color: Colors.red,
+                                                    color: Color(0xffE80F0F),
                                                     fontWeight:
                                                         FontWeight.w600)),
                                           )
@@ -219,7 +219,7 @@ class _CartPageState extends State<CartPage> {
                               Expanded(
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.red,
+                                    color: Color(0xffE80F0F),
                                     borderRadius: BorderRadius.only(
                                         bottomRight: Radius.circular(10)),
                                   ),

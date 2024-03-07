@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w500))),
                           )),
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Color(0xffE80F0F),
                               borderRadius: BorderRadius.circular(30)),
                           height: 18,
                           width: 18,

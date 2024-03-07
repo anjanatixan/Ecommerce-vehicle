@@ -61,7 +61,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: [
                 Icon(
                   Icons.location_on_outlined,
-                  color: Colors.red,
+                  color: Color(0xffE80F0F),
                   size: 18.sp,
                 ),
                 Text(
@@ -120,7 +120,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         fontWeight: FontWeight.w500))),
                           )),
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Color(0xffE80F0F),
                               borderRadius: BorderRadius.circular(30)),
                           height: 18,
                           width: 18,
@@ -301,7 +301,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       style: GoogleFonts.lato(
                                           textStyle: TextStyle(
                                               fontSize: 13.sp,
-                                              color: Colors.red,
+                                              color: Color(0xffE80F0F),
                                               fontWeight: FontWeight.w600)),
                                     )
                                   ],
@@ -325,7 +325,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       style: GoogleFonts.lato(
                                           textStyle: TextStyle(
                                               fontSize: 10.sp,
-                                              color: Colors.red,
+                                              color: Color(0xffE80F0F),
                                               fontWeight: FontWeight.w600)),
                                     ),
                                     Text(
@@ -352,7 +352,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               children: [
                                 Icon(
                                   Icons.location_on_outlined,
-                                  color: Colors.red,
+                                  color: Color(0xffE80F0F),
                                   size: 18.sp,
                                 ),
                                 Text(
@@ -370,7 +370,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               style: GoogleFonts.lato(
                                   textStyle: TextStyle(
                                       fontSize: 10.sp,
-                                      color: Colors.red,
+                                      color: Color(0xffE80F0F),
                                       fontWeight: FontWeight.w500)),
                             ),
                           ],
@@ -506,7 +506,7 @@ class Indicator extends StatelessWidget {
                   height: 8.0,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: index == activeIndex ? Colors.red : Colors.grey),
+                      color: index == activeIndex ? Color(0xffE80F0F) : Colors.grey),
                 ));
           })
           .values

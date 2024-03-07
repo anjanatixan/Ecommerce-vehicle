@@ -119,7 +119,7 @@ class _ProductPageState extends State<ProductPage> {
                                         fontWeight: FontWeight.w500))),
                           )),
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Color(0xffE80F0F),
                               borderRadius: BorderRadius.circular(30)),
                           height: 18,
                           width: 18,
@@ -240,7 +240,7 @@ class _ProductPageState extends State<ProductPage> {
                         CircleAvatar(
                           radius: 2,
                           backgroundColor: selectedIndex == -1
-                              ? Colors.red
+                              ? Color(0xffE80F0F)
                               : Colors.transparent,
                         )
                       ],
@@ -311,7 +311,7 @@ class _ProductPageState extends State<ProductPage> {
                                       CircleAvatar(
                                         radius: 2,
                                         backgroundColor: selectedIndex == index
-                                            ? Colors.red
+                                            ? Color(0xffE80F0F)
                                             : Colors.transparent,
                                       )
                                     ],
@@ -443,7 +443,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 30.h,
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Color(0xffE80F0F),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         bottomLeft: Radius.circular(10.0),
@@ -980,7 +980,7 @@ class _ProductPageState extends State<ProductPage> {
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
                                 dense: true,
-                                activeColor: Colors.red,
+                                activeColor: Color(0xffE80F0F),
                                 checkColor: Colors.white,
                                 contentPadding:
                                     EdgeInsets.symmetric(horizontal: 12.0),
@@ -1011,34 +1011,38 @@ class _ProductPageState extends State<ProductPage> {
                         SizedBox(
                           height: 15.h,
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            searched = false;
-                            filtered = false;
-                            filter=true;
-                            setState(() {});
-                            getContext()
-                                .read<CategoryProvider>()
-                                .paginationIndex = 1;
-                            getContext()
-                                .read<CategoryProvider>()
-                                .productModel!
-                                .product = [];
-                            await getContext()
-                                .read<CategoryProvider>()
-                                .fetchfilterProductlist();
-                            NavigationUtils.goBack(context);
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.red),
-                          ),
-                          child: Text(
-                            'Apply filters',
-                            style: GoogleFonts.lato(
-                              fontSize: 12.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
+                        Container(
+                          width: getWidth(context),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              searched = false;
+                              filtered = false;
+                              filter=true;
+                              setState(() {});
+                              getContext()
+                                  .read<CategoryProvider>()
+                                  .paginationIndex = 1;
+                              getContext()
+                                  .read<CategoryProvider>()
+                                  .productModel!
+                                  .product = [];
+                              await getContext()
+                                  .read<CategoryProvider>()
+                                  .fetchfilterProductlist();
+                              NavigationUtils.goBack(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Color(0xffE80F0F
+)),
+                            ),
+                            child: Text(
+                              'Apply filters',
+                              style: GoogleFonts.lato(
+                                fontSize: 12.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
                         )

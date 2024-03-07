@@ -31,7 +31,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
           },
           style: ButtonStyle(
             side: MaterialStateProperty.all<BorderSide>(
-                BorderSide(color: Colors.red)),
+                BorderSide(color: Color(0xffE80F0F))),
             backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
           ),
           child: Text('View all products',
@@ -106,7 +106,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
                                         fontWeight: FontWeight.w500))),
                           )),
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Color(0xffE80F0F),
                               borderRadius: BorderRadius.circular(30)),
                           height: 18,
                           width: 18,

@@ -63,7 +63,7 @@ class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
           height: 60,
           width: 60,
           child: FloatingActionButton(
-            backgroundColor: Colors.red,
+            backgroundColor: Color(0xffE80F0F),
             elevation: 0,
             onPressed: () {
               getContext().read<BottomNavigationBarProvider>().currentIndex = 2;
@@ -91,11 +91,11 @@ class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
               textStyle: TextStyle(
             fontSize: 10.sp,
           )),
-          selectedItemColor: Colors.red,
+          selectedItemColor: Color(0xffE80F0F),
           unselectedFontSize: 12,
           selectedFontSize: 12,
           selectedLabelStyle: GoogleFonts.lato(
-              textStyle: TextStyle(fontSize: 10.sp, color: Colors.red)),
+              textStyle: TextStyle(fontSize: 10.sp, color: Color(0xffE80F0F))),
           onTap: (index) {
             setState(() {});
             provider.currentIndex = index;
@@ -113,7 +113,7 @@ class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
                   child: provider.currentIndex == 1
                       ? SvgPicture.asset(
                           "assets/images/Service.svg",
-                          color: Colors.red,
+                          color: Color(0xffE80F0F),
                         )
                       : SvgPicture.asset(
                           "assets/images/Service.svg",
@@ -136,7 +136,7 @@ class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
                   child: provider.currentIndex == 3
                       ? SvgPicture.asset(
                           "assets/images/market.svg",
-                          color: Colors.red,
+                          color: Color(0xffE80F0F),
                         )
                       : SvgPicture.asset(
                           "assets/images/market.svg",
@@ -152,7 +152,7 @@ class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
                   child: provider.currentIndex == 4
                       ? SvgPicture.asset(
                           "assets/images/shop.svg",
-                          color: Colors.red,
+                          color: Color(0xffE80F0F),
                         )
                       : SvgPicture.asset(
                           "assets/images/shop.svg",
