@@ -25,6 +25,7 @@ class _ProductPageState extends State<ProductPage> {
   final ScrollController controller = ScrollController();
   var searched = false;
   var filtered = false;
+  var filter = false;
 
   @override
   void initState() {
@@ -39,9 +40,21 @@ class _ProductPageState extends State<ProductPage> {
     });
     controller.addListener(() async {
       if (controller.position.maxScrollExtent == controller.offset) {
-        print('listening here');
-
-        await getContext().read<CategoryProvider>().paginate();
+       
+        if (searched == true) {
+           print('listening here1');
+           await getContext().read<CategoryProvider>().paginatesearch();
+        } else if (filtered == true) {
+           print('listening here2');
+           await getContext().read<CategoryProvider>().paginateSubcategory();
+        }else if(filter==true){
+           print('listen');
+           await getContext().read<CategoryProvider>().paginatefilter();
+        }
+        else{
+           print('listening here');
+          await getContext().read<CategoryProvider>().paginate();
+        }
       }
     });
     super.initState();
@@ -192,6 +205,7 @@ class _ProductPageState extends State<ProductPage> {
                                   .product = [];
                               searched = false;
                               filtered = false;
+                              filter=false;
                             });
 
                             await getContext()
@@ -371,6 +385,7 @@ class _ProductPageState extends State<ProductPage> {
                                             .read<CategoryProvider>()
                                             .paginationIndex = 1;
                                         filtered = true;
+                                        filter=false;
                                         setState(() {});
                                         await getContext()
                                             .read<CategoryProvider>()
@@ -1000,6 +1015,7 @@ class _ProductPageState extends State<ProductPage> {
                           onPressed: () async {
                             searched = false;
                             filtered = false;
+                            filter=true;
                             setState(() {});
                             getContext()
                                 .read<CategoryProvider>()

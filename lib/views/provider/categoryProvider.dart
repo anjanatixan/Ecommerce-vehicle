@@ -42,6 +42,24 @@ class CategoryProvider with ChangeNotifier {
     fetchProductlist();
   }
 
+  paginatesearch() {
+    paginationIndex++;
+    log(".................." + paginationIndex.toString());
+    fetchSearchlist();
+  }
+
+  paginateSubcategory() {
+    paginationIndex++;
+    log(".................." + paginationIndex.toString());
+    fetchCategoryProductlist();
+  }
+
+  paginatefilter() {
+    paginationIndex++;
+    log(".................." + paginationIndex.toString());
+    fetchfilterProductlist();
+  }
+
   setProductId(int id) {
     this.productId = id;
   }
@@ -100,7 +118,11 @@ class CategoryProvider with ChangeNotifier {
   }
 
   setSearchList(SearchModel model) {
-    this.searchModel = model;
+    if (this.searchModel == null) {
+      this.searchModel = model;
+    } else {
+      this.searchModel!.product.addAll(model.product);
+    }
     notifyListeners();
   }
 
@@ -148,7 +170,11 @@ class CategoryProvider with ChangeNotifier {
   }
 
   setCategoryProduct(CategoryProductModel model) {
-    this.categoryProductModel = model;
+    if (this.categoryProductModel == null) {
+      this.categoryProductModel = model;
+    } else {
+      this.categoryProductModel!.productlist.addAll(model.productlist);
+    }
     notifyListeners();
   }
 
