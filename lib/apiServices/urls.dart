@@ -8,4 +8,7 @@ class Urls {
   static String MY_CART = "cart";
   static String DELETE_CART = "cartdelete";
   static String SEARCH = "searchproduct";
+  static String SUBCATEGORY = "subcategorylist";
+  static String BRANDlIST = "brand_list";
+  static String CATEGORYPRODUCT = "categoryproductlist";
 }
