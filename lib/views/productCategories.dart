@@ -71,7 +71,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
             ),
             onPressed: () {},
           ),
-         Stack(
+          Stack(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -86,32 +86,33 @@ class _ProductCategoriesState extends State<ProductCategories> {
                   },
                 ),
               ),
-              Consumer<CartProvider>(
-                builder: (context,provider,child) {
-                  return Positioned(
-                                            top: 5,
-                                            right: 5,
-                                            child: Container(
-                                              child: Center(
-                                                  child: FittedBox(
-                                                child: Text(
-                                                getContext().read<CartProvider>().cartCount.toString() ,
-                                                    style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                      fontSize: 10.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500))
-                                                ),
-                                              )),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.circular(30)),
-                                              height: 18,
-                                              width: 18,
-                                            ));
-                }
-              )
+              Consumer<CartProvider>(builder: (context, provider, child) {
+                return getContext().read<CartProvider>().cartCount != 0
+                    ? Positioned(
+                        top: 5,
+                        right: 5,
+                        child: Container(
+                          child: Center(
+                              child: FittedBox(
+                            child: Text(
+                                getContext()
+                                    .read<CartProvider>()
+                                    .cartCount
+                                    .toString(),
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 10.sp,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500))),
+                          )),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(30)),
+                          height: 18,
+                          width: 18,
+                        ))
+                    : Container();
+              })
             ],
           ),
         ],
@@ -131,7 +132,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
                   (index) {
                     return GestureDetector(
                       onTap: () {
-                       getContext()
+                        getContext()
                             .read<BottomNavigationBarProvider>()
                             .currentIndex = 2;
                         NavigationUtils.goNextFinishAll(context, BottomBar());

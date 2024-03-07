@@ -9,7 +9,7 @@ class CartProvider with ChangeNotifier{
    CartModel? cartModel;
    CartRepo cartRepo=CartRepo();
    int? cartId;
-   int? cartCount;
+   int cartCount=0;
    
    setCartCount(int count){
     this.cartCount=count;

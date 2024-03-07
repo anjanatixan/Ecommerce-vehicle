@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecommerce/models/categoryModel.dart';
 import 'package:ecommerce/models/productDetailsModel.dart';
 import 'package:ecommerce/models/productModel.dart';
@@ -6,47 +8,63 @@ import 'package:ecommerce/views/helper/utils.dart';
 import 'package:ecommerce/views/repo/categoryRepo.dart';
 import 'package:flutter/material.dart';
 
-class CategoryProvider with ChangeNotifier{
+class CategoryProvider with ChangeNotifier {
   CategoryModel? categoryModel;
   ProductModel? productModel;
   ProductDetailsModel? productDetailsModel;
-  CategoryRepo categoryRepo=CategoryRepo();
-  int paginationIndex=1;
+  CategoryRepo categoryRepo = CategoryRepo();
+  int paginationIndex = 1;
   int? productId;
+  String? search;
 
-  setProductId(int id){
-    this.productId=id;
+  setSearch(String text){
+    this.search=text;
   }
 
-   fetchCategorylist() async {
+  paginate() {
+    paginationIndex++;
+    log(".................." + paginationIndex.toString());
+    fetchProductlist();
+  }
+
+  setProductId(int id) {
+    this.productId = id;
+  }
+
+  fetchCategorylist() async {
     showLoading(getContext());
     await categoryRepo.getCategorylist();
     NavigationUtils.goBack(getContext());
   }
 
-   fetchProductlist() async {
+  fetchProductlist() async {
     showLoading(getContext());
     await categoryRepo.getProductList(paginationIndex);
     NavigationUtils.goBack(getContext());
   }
 
-   setCategoryList(CategoryModel model) {
+  setCategoryList(CategoryModel model) {
     this.categoryModel = model;
     notifyListeners();
   }
 
-    setProductList(ProductModel model) {
-    this.productModel = model;
+  setProductList(ProductModel model) {
+    if (this.productModel == null) {
+      this.productModel = model;
+    } else {
+      this.productModel!.product.addAll(model.product);
+    }
+
     notifyListeners();
   }
 
-   fetchProductdetails() async {
+  fetchProductdetails() async {
     showLoading(getContext());
     await categoryRepo.getProductDetails();
     NavigationUtils.goBack(getContext());
   }
 
-   setProductDetails(ProductDetailsModel model) {
+  setProductDetails(ProductDetailsModel model) {
     this.productDetailsModel = model;
     notifyListeners();
   }

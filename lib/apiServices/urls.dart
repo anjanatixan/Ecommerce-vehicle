@@ -7,4 +7,5 @@ class Urls {
   static String ADD_TO_CART = "cartadd";
   static String MY_CART = "cart";
   static String DELETE_CART = "cartdelete";
+  static String SEARCH = "searchproduct";
 }

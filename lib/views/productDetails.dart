@@ -101,29 +101,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ),
               Consumer<CartProvider>(builder: (context, provider, child) {
-                return Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      child: Center(
-                          child: FittedBox(
-                        child: Text(
-                            getContext()
-                                .read<CartProvider>()
-                                .cartCount
-                                .toString(),
-                            style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 10.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500))),
-                      )),
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(30)),
-                      height: 18,
-                      width: 18,
-                    ));
+                return getContext().read<CartProvider>().cartCount != 0
+                    ? Positioned(
+                        top: 5,
+                        right: 5,
+                        child: Container(
+                          child: Center(
+                              child: FittedBox(
+                            child: Text(
+                                getContext()
+                                    .read<CartProvider>()
+                                    .cartCount
+                                    .toString(),
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 10.sp,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500))),
+                          )),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(30)),
+                          height: 18,
+                          width: 18,
+                        ))
+                    : Container();
               })
             ],
           ),

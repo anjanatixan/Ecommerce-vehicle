@@ -20,7 +20,7 @@ class BottomBar extends StatefulWidget {
   State<BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomBarState extends State<BottomBar> with WidgetsBindingObserver {
   static List<Widget> screens = [
     HomePage(),
     ServicePage(),
@@ -29,12 +29,36 @@ class _BottomBarState extends State<BottomBar> {
     ShopPage()
   ];
 
+  bool _isKeyboardVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    setState(() {
+      _isKeyboardVisible = isKeyboardVisible;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BottomNavigationBarProvider>(
         builder: (context, provider, child) {
       return Scaffold(
-        floatingActionButton: Container(
+        floatingActionButton: _isKeyboardVisible
+              ? null :Container(
           margin: const EdgeInsets.only(top: 6),
           height: 60,
           width: 60,
