@@ -6,6 +6,7 @@ import 'package:ecommerce/apiServices/webService.dart';
 import 'package:ecommerce/models/categoryModel.dart';
 import 'package:ecommerce/models/productDetailsModel.dart';
 import 'package:ecommerce/models/productModel.dart';
+import 'package:ecommerce/models/searchModel.dart';
 import 'package:ecommerce/views/helper/utils.dart';
 import 'package:ecommerce/views/provider/categoryProvider.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,28 @@ log(response.statusCode.toString());
       Map<String, dynamic> responseBody = jsonDecode(response.body);
       ProductModel model = ProductModel.fromJson(responseBody);
       getContext().read<CategoryProvider>().setProductList(model);
+      log("message" + responseBody.toString());
+    } else {
+       
+    }
+    return "";
+  }
+
+Future<String> getSearchList(int paginationIndex) async {
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+    var body = jsonEncode({
+      "productname": getContext().read<CategoryProvider>().search,
+      "index": paginationIndex,
+    
+    });
+    final response = await _service.postResponse(Urls.SEARCH, body, headers);
+log(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+      SearchModel model = SearchModel.fromJson(responseBody);
+      getContext().read<CategoryProvider>().setSearchList(model);
       log("message" + responseBody.toString());
     } else {
        

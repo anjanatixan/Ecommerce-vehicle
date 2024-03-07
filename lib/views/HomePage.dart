@@ -399,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text("View all",
                           style: GoogleFonts.lato(
                               textStyle: TextStyle(
-                                  fontSize: 10.sp,
+                                  fontSize: 12.sp,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500))),
                     ),

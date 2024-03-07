@@ -23,6 +23,7 @@ class _ProductPageState extends State<ProductPage> {
   int selectedIndex = -1;
   String _selectedOption = 'Option 1';
   final ScrollController controller = ScrollController();
+  var searched = false;
 
   List<Map<String, dynamic>> data = [
     {"name": "T shine", "selected": false},
@@ -30,8 +31,8 @@ class _ProductPageState extends State<ProductPage> {
     {"name": "Sonax", "selected": false},
     {"name": "Moto Rex", "selected": false},
   ];
- 
- @override
+
+  @override
   void initState() {
     controller.addListener(() async {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -42,6 +43,7 @@ class _ProductPageState extends State<ProductPage> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,9 +114,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
-      body: ListView(
-        controller: controller,
-        children: [
+      body: ListView(controller: controller, children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -124,10 +124,31 @@ class _ProductPageState extends State<ProductPage> {
                 child: TextField(
                   controller: _searchController,
                   textInputAction: TextInputAction.search,
-                  onSubmitted: (searchtext) {
-                    getContext().read<CategoryProvider>().setSearch(searchtext);
-                    // searched = true;
-                    // setState(() {});
+                  onSubmitted: (searchtext) async {
+                    if (searchtext.isEmpty) {
+                      getContext().read<CategoryProvider>().paginationIndex = 1;
+                      searched=false;
+                      setState(() {
+                        
+                      });
+                       getContext()
+                          .read<CategoryProvider>().productModel!.product=[];
+                      await getContext()
+                          .read<CategoryProvider>()
+                          .fetchProductlist();
+
+                    } else {
+                      await getContext()
+                          .read<CategoryProvider>()
+                          .setSearch(searchtext);
+                         getContext()
+                          .read<CategoryProvider>().paginationIndex=1;
+                      await getContext()
+                          .read<CategoryProvider>()
+                          .fetchSearchlist();
+                      searched = true;
+                      setState(() {});
+                    }
                   },
                   decoration: InputDecoration(
                     fillColor: Colors.white,
@@ -386,137 +407,318 @@ class _ProductPageState extends State<ProductPage> {
                     fontWeight: FontWeight.w500),
               )),
         ),
-        Consumer<CategoryProvider>(
-          builder: (context,provider,child) {
-            return Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Number of columns in the grid
-                    crossAxisSpacing: 8.0, // Spacing between columns
-                    mainAxisSpacing: 8.0, // Spacing between rows
-                  ),
-                  itemCount: provider.productModel!.product.length, // Number of items in the grid
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                        onTap: () {
-                          NavigationUtils.goNext(context, ProductDetails());
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            width: 110.w,
-                            color: Colors.white,
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.grey.shade300,
-                                          size: 18.sp,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Image.network(
-                                          Urls.IMAGE_URL +
-                                                      provider
-                                                          .productModel!
-                                                          .product[index]
-                                                          .images,
-                                          width: 80.w,
-                                          height: 80.h,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        provider.productModel!
-                                                    .product[index].productName,
-                                        style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                              fontSize: 10.sp,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+        searched == false
+            ? Consumer<CategoryProvider>(builder: (context, provider, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns in the grid
+                        crossAxisSpacing: 8.0, // Spacing between columns
+                        mainAxisSpacing: 8.0, // Spacing between rows
+                      ),
+                      itemCount: provider.productModel!.product
+                          .length, // Number of items in the grid
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                            onTap: ()async {
+                              await getContext()
+                                      .read<CategoryProvider>()
+                                      .setProductId(provider
+                                          .productModel!.product[index].id);
+                              NavigationUtils.goNext(context, ProductDetails());
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: 110.w,
+                                color: Colors.white,
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "Rs. ${provider.productModel!.product[index].price.toString()} ",
-                                                  style: GoogleFonts.lato(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 10.sp,
-                                                        decoration: TextDecoration
-                                                            .lineThrough,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
+                                          Align(
+                                            alignment: Alignment.topRight,
+                                            child: Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.grey.shade300,
+                                              size: 18.sp,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Image.network(
+                                              Urls.IMAGE_URL +
+                                                  provider.productModel!
+                                                      .product[index].images,
+                                              width: 80.w,
+                                              height: 80.h,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            provider.productModel!
+                                                .product[index].productName,
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                  fontSize: 10.sp,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "Rs. ${provider.productModel!.product[index].price.toString()} ",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 10.sp,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                        "Rs. ${provider.productModel!.product[index].offerPrice} ",
+                                                        style: GoogleFonts.lato(
+                                                            textStyle: TextStyle(
+                                                                fontSize: 10.sp,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500))),
+                                                  ],
                                                 ),
-                                                Text("Rs. ${provider.productModel!.product[index].offerPrice} ",
-                                                    style: GoogleFonts.lato(
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "4.5 ",
+                                                      style: GoogleFonts.lato(
                                                         textStyle: TextStyle(
                                                             fontSize: 10.sp,
                                                             color: Colors.black,
                                                             fontWeight:
-                                                                FontWeight.w500))),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "4.5 ",
-                                                  style: GoogleFonts.lato(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 10.sp,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.star,
+                                                      size: 16.sp,
+                                                      color: Colors.greenAccent,
+                                                    )
+                                                  ],
                                                 ),
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 16.sp,
-                                                  color: Colors.greenAccent,
-                                                )
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                            ));
+                      }),
+                );
+              })
+            : Consumer<CategoryProvider>(builder: (context, provider, child) {
+                return provider.searchModel != null
+                    ? provider.searchModel!.product.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      2, // Number of columns in the grid
+                                  crossAxisSpacing:
+                                      8.0, // Spacing between columns
+                                  mainAxisSpacing: 8.0, // Spacing between rows
+                                ),
+                                itemCount: provider.searchModel!.product
+                                    .length, // Number of items in the grid
+                                itemBuilder: (BuildContext context, int index) {
+                                  return InkWell(
+                                      onTap: () async{
+                                        await getContext()
+                                      .read<CategoryProvider>()
+                                      .setProductId(provider
+                                          .searchModel!.product[index].id);
+                                        NavigationUtils.goNext(
+                                            context, ProductDetails());
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: 110.w,
+                                          color: Colors.white,
+                                          child: Stack(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      child: Icon(
+                                                        Icons.favorite_border,
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                        size: 18.sp,
+                                                      ),
+                                                    ),
+                                                    Center(
+                                                      child: Image.network(
+                                                        Urls.IMAGE_URL +
+                                                            provider
+                                                                .searchModel!
+                                                                .product[index]
+                                                                .images,
+                                                        width: 80.w,
+                                                        height: 80.h,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      provider
+                                                          .searchModel!
+                                                          .product[index]
+                                                          .productName,
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 10.sp,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 2,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                "Rs. ${provider.searchModel!.product[index].price.toString()} ",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .lato(
+                                                                  textStyle: TextStyle(
+                                                                      fontSize:
+                                                                          10.sp,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .lineThrough,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                  "Rs. ${provider.searchModel!.product[index].offerPrice} ",
+                                                                  style: GoogleFonts.lato(
+                                                                      textStyle: TextStyle(
+                                                                          fontSize: 10
+                                                                              .sp,
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.w500))),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                "4.5 ",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .lato(
+                                                                  textStyle: TextStyle(
+                                                                      fontSize:
+                                                                          10.sp,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500),
+                                                                ),
+                                                              ),
+                                                              Icon(
+                                                                Icons.star,
+                                                                size: 16.sp,
+                                                                color: Colors
+                                                                    .greenAccent,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ));
+                                }),
+                          )
+                        : Container(
+                            height: 200,
+                            child: Center(
+                              child: Text("No data found"),
                             ),
-                          ),
-                        ));
-                  }),
-            );
-          }
-        )
+                          )
+                    : Container();
+              })
       ]),
     );
   }

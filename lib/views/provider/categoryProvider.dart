@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:ecommerce/models/categoryModel.dart';
 import 'package:ecommerce/models/productDetailsModel.dart';
 import 'package:ecommerce/models/productModel.dart';
+import 'package:ecommerce/models/searchModel.dart';
 import 'package:ecommerce/views/helper/navigation.dart';
 import 'package:ecommerce/views/helper/utils.dart';
 import 'package:ecommerce/views/repo/categoryRepo.dart';
@@ -11,14 +12,15 @@ import 'package:flutter/material.dart';
 class CategoryProvider with ChangeNotifier {
   CategoryModel? categoryModel;
   ProductModel? productModel;
+  SearchModel? searchModel;
   ProductDetailsModel? productDetailsModel;
   CategoryRepo categoryRepo = CategoryRepo();
   int paginationIndex = 1;
   int? productId;
   String? search;
 
-  setSearch(String text){
-    this.search=text;
+  setSearch(String text) {
+    this.search = text;
   }
 
   paginate() {
@@ -40,6 +42,12 @@ class CategoryProvider with ChangeNotifier {
   fetchProductlist() async {
     showLoading(getContext());
     await categoryRepo.getProductList(paginationIndex);
+    NavigationUtils.goBack(getContext());
+  }
+
+  fetchSearchlist() async {
+    showLoading(getContext());
+    await categoryRepo.getSearchList(paginationIndex);
     NavigationUtils.goBack(getContext());
   }
 
@@ -66,6 +74,11 @@ class CategoryProvider with ChangeNotifier {
 
   setProductDetails(ProductDetailsModel model) {
     this.productDetailsModel = model;
+    notifyListeners();
+  }
+
+  setSearchList(SearchModel model) {
+    this.searchModel = model;
     notifyListeners();
   }
 }
